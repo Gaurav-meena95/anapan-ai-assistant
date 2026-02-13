@@ -1,13 +1,17 @@
-
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import Login from './Auth/Login'
+import PageNotFound from './Auth/PageNotFound'
+import Dashboard from './Dashboard/Dashboard'
 function App() {
 
   return (
-    <>
-    <div>
-      <h1 className="text-blue-300">anapan-ai-assistant</h1>
-    </div>
-
-    </>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/login' element={<Login/>} />
+      <Route path='/dashboard' element={<Dashboard/>} />
+      <Route path='*' element={<PageNotFound/>} />
+    </Routes>
+    </BrowserRouter>
   )
 }
 
