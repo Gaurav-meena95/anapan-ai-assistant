@@ -4,7 +4,7 @@ import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { Calendar, Clock, X, Loader2, Linkedin } from 'lucide-react';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function Dashboard() {
   const [meetings, setMeetings] = useState([]);
