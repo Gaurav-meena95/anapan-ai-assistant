@@ -2,48 +2,53 @@ const axios = require('axios');
 
 const generateMeetingPrep = async (profileData) => {
   try {
-    const prompt = `You are a B2B sales intelligence assistant.
+    const profileText = [
+      `Name: ${profileData.name || 'N/A'}`,
+      `Headline: ${profileData.headline || 'N/A'}`,
+      `Company: ${profileData.company || 'N/A'}`,
+      `Location: ${profileData.location || 'N/A'}`,
+      `About: ${profileData.about || 'N/A'}`,
+      `Experience: ${JSON.stringify(profileData.experience || [])}`
+    ].join('\n');
 
-Given this LinkedIn profile:
-Name: ${profileData.name || 'N/A'}
-Headline: ${profileData.headline || 'N/A'}
-Company: ${profileData.company || 'N/A'}
-Location: ${profileData.location || 'N/A'}
-About: ${profileData.about || 'N/A'}
-Experience: ${JSON.stringify(profileData.experience || [])}
+    const prompt = `You are a meeting preparation assistant. Analyze this LinkedIn profile and provide brief, clear answers.
 
-Generate a meeting preparation brief answering:
-1. Who are they?
-2. Where do they work / have worked?
-3. What is their role like?
-4. Are they likely a buyer?
-5. Personality traits inference.
-6. Best conversation approach.
+Profile:
+${profileText}
 
-Be concise but strategic.
-Use bullet points.
-Professional tone.`;
+Answer these questions in simple, short paragraphs (2-3 sentences each):
+
+Who are they?
+
+Where do they work / have worked?
+
+What is their role like in their company?
+
+Can they be the right buyer?
+
+What is their personality like?
+
+How should you approach talking to them?
+
+Keep answers concise and professional. No markdown formatting, no bullet points, no bold text. Just plain text with question headings.`;
 
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'mistralai/mistral-7b-instruct:free',
-        messages: [
-          {
-            role: 'user',
-            content: prompt
-          }
-        ]
+        model: 'mistralai/mistral-7b-instruct',
+        messages: [{ role: 'user', content: prompt }]
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json'
-        }
+        },
+        timeout: 60000
       }
     );
 
-    return response.data.choices[0].message.content;
+    const content = response.data?.choices?.[0]?.message?.content;
+    return content || 'Unable to generate meeting prep at this time. Please try again later.';
   } catch (error) {
     return 'Unable to generate meeting prep at this time. Please try again later.';
   }

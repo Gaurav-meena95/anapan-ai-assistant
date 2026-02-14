@@ -1,5 +1,6 @@
+const path = require('path');
 const express = require('express');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const cors = require('cors');
 const connectDB = require('./src/Config/db');
 const meetingRoutes = require('./src/routes/meetingRoutes');
@@ -12,7 +13,7 @@ app.use(express.json());
 
 connectDB();
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.status(200).json({ message: 'AI Meeting Prep Assistant API' });
 });
 

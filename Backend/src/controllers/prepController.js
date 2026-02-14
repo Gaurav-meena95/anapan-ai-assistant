@@ -1,10 +1,10 @@
 const Meeting = require('../models/Meeting');
-const { fetchLinkedInProfile } = require('../services/linkedinService');
+const { fetchLinkedInProfile } = require('../services/linkedinService.mock');
 const { generateMeetingPrep } = require('../services/llmService');
 
 const generatePrep = async (req, res) => {
   try {
-    const { meetingId, attendeeEmail } = req.body;
+    const { meetingId, attendeeEmail, linkedinUrl } = req.body;
 
     if (!meetingId || !attendeeEmail) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -15,16 +15,26 @@ const generatePrep = async (req, res) => {
       return res.json({ prep: existingPrep.generatedPrep, cached: true });
     }
 
-    const linkedInResult = await fetchLinkedInProfile(attendeeEmail);
+    const linkedInResult = await fetchLinkedInProfile(attendeeEmail, linkedinUrl);
 
     if (!linkedInResult.success) {
       const prep = linkedInResult.message;
-      await Meeting.create({ meetingId, attendeeEmail, generatedPrep: prep });
+      try {
+        await Meeting.create({ meetingId, attendeeEmail, generatedPrep: prep });
+      } catch (e) {
+        const cached = await Meeting.findOne({ meetingId, attendeeEmail });
+        if (cached) return res.json({ prep: cached.generatedPrep, cached: true });
+      }
       return res.json({ prep, cached: false });
     }
 
     const prep = await generateMeetingPrep(linkedInResult.profile);
-    await Meeting.create({ meetingId, attendeeEmail, generatedPrep: prep });
+    try {
+      await Meeting.create({ meetingId, attendeeEmail, generatedPrep: prep });
+    } catch (e) {
+      const cached = await Meeting.findOne({ meetingId, attendeeEmail });
+      if (cached) return res.json({ prep: cached.generatedPrep, cached: true });
+    }
 
     res.json({ prep, cached: false });
   } catch (error) {
