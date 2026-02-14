@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
+import { Calendar, Clock, X, Loader2, Linkedin } from 'lucide-react';
 
 const API_URL = 'http://localhost:3000';
 
@@ -119,9 +120,7 @@ function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                <Calendar className="w-5 h-5 text-white" />
               </div>
               <h1 className="text-lg sm:text-xl font-bold text-gray-900">Meeting Prep Assistant</h1>
             </div>
@@ -160,9 +159,7 @@ function Dashboard() {
         {meetings.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+              <Calendar className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No upcoming meetings</h3>
             <p className="text-gray-600 text-sm">{calendarError ? 'Connect Google Calendar in Backend .env to see meetings here.' : 'No meetings in the next 24 hours.'}</p>
@@ -177,9 +174,7 @@ function Dashboard() {
                       {meeting.title}
                     </h3>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                      <Clock className="w-4 h-4" />
                       {new Date(meeting.startTime).toLocaleString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -198,7 +193,7 @@ function Dashboard() {
                     meeting.attendees.map((email) => (
                       <div key={email} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
                             <span className="text-blue-600 text-sm font-medium">
                               {email.charAt(0).toUpperCase()}
                             </span>
@@ -213,10 +208,7 @@ function Dashboard() {
                           >
                             {generatingPrep === `${meeting.id}-${email}` ? (
                               <span className="flex items-center justify-center gap-2">
-                                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
+                                <Loader2 className="animate-spin h-4 w-4" />
                                 Generating...
                               </span>
                             ) : (
@@ -229,9 +221,7 @@ function Dashboard() {
                             className="flex-1 sm:flex-none bg-gray-100 text-gray-700 text-sm py-2 px-4 rounded-lg font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 transition"
                             title="Provide LinkedIn URL"
                           >
-                            <svg className="w-4 h-4 inline" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                            </svg>
+                            <Linkedin className="w-4 h-4 inline" />
                           </button>
                         </div>
                       </div>
@@ -257,9 +247,7 @@ function Dashboard() {
                 onClick={() => setSelectedPrep(null)}
                 className="text-gray-400 hover:text-gray-600 transition"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-5 h-5" />
               </button>
             </div>
             <div className="overflow-y-auto p-6 bg-white">
