@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 const cors = require('cors');
 const connectDB = require('./src/Config/db');
 const meetingRoutes = require('./src/routes/meetingRoutes');
@@ -20,13 +20,11 @@ app.get('/', (_, res) => {
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/prep', prepRoutes);
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
 
-// Export for Vercel serverless
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 module.exports = app;
