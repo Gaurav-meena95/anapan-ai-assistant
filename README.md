@@ -1,46 +1,96 @@
 # AI Meeting Prep Assistant
 
-MERN stack application that generates AI-powered meeting preparation briefs using Google Calendar and LinkedIn data.
+A full-stack web application that helps you prepare for meetings by automatically fetching upcoming events from Google Calendar and generating AI-powered preparation briefs using LinkedIn profile data.
 
 ## Features
 
-- Firebase authentication
-- Google Calendar integration
-- AI meeting prep generation
-- MongoDB caching
-- Responsive UI
+- Secure authentication with Firebase
+- Google Calendar integration to fetch upcoming meetings
+- AI-generated meeting preparation briefs
+- LinkedIn profile data extraction
+- MongoDB for data persistence
+- Responsive design for all devices
 
 ## Tech Stack
 
-**Backend:** Node.js, Express, MongoDB, Firebase, Google Calendar API, OpenRouter  
-**Frontend:** React, Vite, TailwindCSS, Firebase
+**Frontend:**
+- React with Vite
+- TailwindCSS for styling
+- Firebase Authentication
+- Lucide React for icons
 
-## Quick Start
+**Backend:**
+- Node.js & Express
+- MongoDB with Mongoose
+- Firebase Admin SDK
+- Google Calendar API
+- OpenRouter API for AI generation
+- RapidAPI for LinkedIn data
 
-### Install Dependencies
+## Getting Started
 
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB (local or Atlas)
+- Firebase project
+- Google Cloud project with Calendar API enabled
+- RapidAPI account
+- OpenRouter API key
+
+### Installation
+
+1. Clone the repository
 ```bash
-cd Backend && npm install
-cd ../frontend && npm install
+git clone <your-repo-url>
+cd anapan-ai-assistant
 ```
 
-### Configure Environment
+2. Install backend dependencies
+```bash
+cd Backend
+npm install
+```
 
-**Backend/.env:**
+3. Install frontend dependencies
+```bash
+cd ../frontend
+npm install
+```
+
+### Configuration
+
+#### Backend Environment Variables
+
+Create a `Backend/.env` file:
+
 ```env
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/meeting-prep
-FIREBASE_SERVICE_ACCOUNT_PATH=firebase-service-account.json
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-client-secret
+NODE_ENV=development
+
+# Firebase Configuration
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour-Private-Key\n-----END PRIVATE KEY-----\n"
+
+# Google Calendar API
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REFRESH_TOKEN=your-refresh-token
+
+# External APIs
 RAPIDAPI_KEY=your-rapidapi-key
-OPENROUTER_API_KEY=your-openrouter-key
+OPENROUTER_API_KEY=your-openrouter-api-key
 ```
 
-**Frontend/.env:**
+#### Frontend Environment Variables
+
+Create a `frontend/.env` file:
+
 ```env
-VITE_FIREBASE_API_KEY=your-api-key
+VITE_API_URL=http://localhost:3000
+VITE_FIREBASE_API_KEY=your-firebase-api-key
 VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your-project-id
 VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
@@ -48,17 +98,84 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 ```
 
-### Start Application
+### Running Locally
 
+1. Start the backend server
 ```bash
-# Terminal 1 - Backend
-cd Backend && npm start
-
-# Terminal 2 - Frontend
-cd frontend && npm run dev
+cd Backend
+npm run dev
 ```
 
-Open http://localhost:5173
+2. Start the frontend development server
+```bash
+cd frontend
+npm run dev
+```
+
+3. Open your browser and navigate to `http://localhost:5173`
+
+## Deployment
+
+### Backend (Render)
+
+1. Create a new Web Service on Render
+2. Connect your repository
+3. Set root directory to `Backend`
+4. Add all environment variables from `.env`
+5. Deploy
+
+### Frontend (Vercel)
+
+1. Import your repository to Vercel
+2. Set root directory to `frontend`
+3. Add environment variables:
+   - `VITE_API_URL` = your backend URL (e.g., `https://your-backend.onrender.com`)
+   - All Firebase config variables
+4. Deploy
+
+## Project Structure
+
+```
+├── Backend/
+│   ├── src/
+│   │   ├── Config/         # Database and API configurations
+│   │   ├── controllers/    # Request handlers
+│   │   ├── middleware/     # Authentication middleware
+│   │   ├── models/         # MongoDB schemas
+│   │   ├── routes/         # API routes
+│   │   └── services/       # Business logic
+│   ├── index.js            # Entry point
+│   └── package.json
+│
+└── frontend/
+    ├── src/
+    │   ├── Auth/           # Login and auth components
+    │   ├── Dashboard/      # Main dashboard
+    │   ├── firebase.js     # Firebase config
+    │   └── main.jsx        # Entry point
+    └── package.json
+```
+
+## API Endpoints
+
+### Meetings
+- `GET /api/meetings/upcoming` - Fetch upcoming meetings from Google Calendar
+
+### Prep
+- `POST /api/prep/generate` - Generate AI meeting preparation brief
+
+## How It Works
+
+1. User logs in with Firebase authentication
+2. Backend fetches upcoming meetings from Google Calendar
+3. User selects a meeting and attendee
+4. System searches for attendee's LinkedIn profile
+5. AI generates a personalized meeting prep brief
+6. User reviews the preparation notes
+
+## Contributing
+
+Feel free to submit issues and pull requests.
 
 ## License
 

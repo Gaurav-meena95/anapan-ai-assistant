@@ -1,5 +1,5 @@
 const Meeting = require('../models/Meeting');
-const { fetchLinkedInProfile } = require('../services/linkedinService.mock');
+const { fetchLinkedInProfile } = require('../services/linkedinService');
 const { generateMeetingPrep } = require('../services/llmService');
 
 const generatePrep = async (req, res) => {
