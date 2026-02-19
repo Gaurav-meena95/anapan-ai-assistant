@@ -3,19 +3,27 @@ const { fetchLinkedInProfile } = require('../services/linkedinService');
 const { generateMeetingPrep } = require('../services/llmService');
 
 const generatePrep = async (req, res) => {
+
   try {
     const { meetingId, attendeeEmail, linkedinUrl } = req.body;
+
 
     if (!meetingId || !attendeeEmail) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
+     const linkedInResult = await fetchLinkedInProfile(attendeeEmail, linkedinUrl);
+     console.log(linkedInResult)
 
     const existingPrep = await Meeting.findOne({ meetingId, attendeeEmail });
     if (existingPrep) {
       return res.json({ prep: existingPrep.generatedPrep, cached: true });
     }
 
-    const linkedInResult = await fetchLinkedInProfile(attendeeEmail, linkedinUrl);
+   
+
+    console.log('hek',linkedInResult,linkedinUrl)
+
+
 
     if (!linkedInResult.success) {
       const prep = linkedInResult.message;

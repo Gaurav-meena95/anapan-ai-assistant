@@ -58,6 +58,7 @@ function Dashboard() {
   };
 
   const handleGeneratePrep = async (meetingId, attendeeEmail, providedUrl = null) => {
+
     if (showUrlModal) {
       setShowUrlModal(null);
     }
@@ -79,6 +80,7 @@ function Dashboard() {
       });
 
       const data = await response.json().catch(() => ({}));
+      console.log('data :',data)
       if (!response.ok) throw new Error(data.error || 'Failed to generate prep');
 
       setSelectedPrep({
